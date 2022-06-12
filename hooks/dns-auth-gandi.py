@@ -42,7 +42,7 @@ def main():
 	else:
 		res = requests.post(
 			f"{GANDI_URL}/livedns/domains/{GD}/records", headers=GH,
-			json={"rrest_name": RN, "rrset_type": "TXT", "rrset_ttl": "300", "rrset_values": [CV]})
+			json={"rrset_name": RN, "rrset_type": "TXT", "rrset_ttl": "300", "rrset_values": [CV]})
 	if res.status_code > 300 or res.status_code < 200:
 		print(res.text)
 		raise ConnectionError(f"fail to put/post {RN}")
