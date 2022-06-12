@@ -55,10 +55,10 @@ if [ -d certs ]; then
 fi
 podman run -it \
   --name certbot-gandi \
-  --entrypoint "/bin/ash" \
+  --entrypoint "/bin/sh" \
   -v "$CONTAINER_VOLUME_ETC":/certs \
   docker.io/certbot/certbot:latest \
-  /bin/ash &
+  /bin/sh &
 
 podman cp certbot-gandi:/certs .
 podman stop certbot-gandi
