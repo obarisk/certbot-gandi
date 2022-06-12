@@ -1,4 +1,4 @@
-# certbot plugins
+# certbot gandi plugin
 
 - [dns-01-challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge)
 - [gandi-api](https://api.gandi.net/docs/)
