@@ -53,13 +53,11 @@ find posthooks/ -type f -executable -exec '{}' ';'
 if [ -d certs ]; then
   mv certs "hist/certs-$(date "+%s%N")"
 fi
-podman run -it \
+podman run -d \
   --name certbot-gandi \
-  --entrypoint "/bin/sh" \
-  -v "$CONTAINER_VOLUME_ETC":/certs \
+  --entrypoint "/bin/sleep" -v "$CONTAINER_VOLUME_ETC":/certs \
   docker.io/certbot/certbot:latest \
-  /bin/sh &
-
+  3600
 podman cp certbot-gandi:/certs .
 podman stop certbot-gandi
 podman rm certbot-gandi
