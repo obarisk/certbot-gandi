@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+if [ "$1" != "renew" ] && [ "$1" != "certonly" ] && [ "$1" != "test" ]; then
+  echo "unsupport command. allow only renew and certonly subcommand"
+  exit 1
+fi
+
 if [ -n "$DOCKER" ]; then
   alias podman=docker
 fi
@@ -44,3 +49,17 @@ if [ "$1" = "renew" ]; then
 fi
 
 find posthooks/ -type f -executable -exec '{}' ';'
+
+if [ -d certs ]; then
+  mv certs "hist/certs-$(date "+%s%N")"
+fi
+podman run -it \
+  --name certbot-gandi \
+  --entrypoint "/bin/ash" \
+  -v "$CONTAINER_VOLUME_ETC":/certs \
+  docker.io/certbot/certbot:latest \
+  /bin/ash &
+
+podman cp certbot-gandi:/certs .
+podman stop certbot-gandi
+podman rm certbot-gandi

@@ -1,2 +1,3 @@
 /posthooks/*.sh
 /certs/*
+/hist/certs-*/*
