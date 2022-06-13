@@ -35,10 +35,12 @@ def main():
 		raise ConnectionError(f"fail to get dns records from {GD}")
 
 	if RN in [x.get("rrset_name") for x in res.json() if x.get("rrset_type") == "TXT"]:
+		OV = filter(lambda r: r.get("rrset_name") == RN and r.get("rrset_type") == "TXT", res.json())
+		VS = [CV] + list(OV)[0].get("rrset_values")
 		res = requests.put(
 			f"{GANDI_URL}/livedns/domains/{GD}/records/{RN}", headers=GH,
 			json={"items": [
-				{"rrset_name": RN, "rrset_type": "TXT", "rrset_ttl": "300", "rrset_values": [CV]}]})
+				{"rrset_name": RN, "rrset_type": "TXT", "rrset_ttl": "300", "rrset_values": VS}]})
 	else:
 		res = requests.post(
 			f"{GANDI_URL}/livedns/domains/{GD}/records", headers=GH,
@@ -47,7 +49,7 @@ def main():
 		print(res.text)
 		raise ConnectionError(f"fail to put/post {RN}")
 	print(f"add {RN} record. status = {res.status_code}. message = {res.json()}")
-	time.sleep(60)
+	time.sleep(44)
 
 if __name__ == "__main__":
 	main()
